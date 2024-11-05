@@ -23,6 +23,9 @@ func NewCLIHandler(stdout io.Writer, calculator Calculator) *CLIHandler {
 	}
 }
 func (this *CLIHandler) Handle(args []string) error {
+	if this.calculator == nil {
+		return errUnsupportedOperation
+	}
 	if len(args) != 2 {
 		return errWrongArgCount
 	}
@@ -43,7 +46,8 @@ func (this *CLIHandler) Handle(args []string) error {
 }
 
 var (
-	errWrongArgCount   = errors.New("usage: calculator <a> <b>")
-	errInvalidArgument = errors.New("invalid argument")
-	errOutputFailure   = errors.New("output failure")
+	errWrongArgCount        = errors.New("usage: calculator <a> <b>")
+	errInvalidArgument      = errors.New("invalid argument")
+	errOutputFailure        = errors.New("output failure")
+	errUnsupportedOperation = errors.New("unsupported operation")
 )

@@ -17,18 +17,23 @@ func assertErr(t *testing.T, actual error, targets ...error) {
 	}
 }
 
-func TestHandler_TwoArgsRequired(t *testing.T) {
+func TestHandler_NilCalculator_UnsupportedOperation(t *testing.T) {
 	handler := NewCLIHandler(nil, nil)
+	err := handler.Handle(nil)
+	assertErr(t, err, errUnsupportedOperation)
+}
+func TestHandler_TwoArgsRequired(t *testing.T) {
+	handler := NewCLIHandler(nil, &calc.Addition{})
 	err := handler.Handle(nil)
 	assertErr(t, err, errWrongArgCount)
 }
 func TestHandler_FirstArgInvalid(t *testing.T) {
-	handler := NewCLIHandler(nil, nil)
+	handler := NewCLIHandler(nil, &calc.Addition{})
 	err := handler.Handle([]string{"INVALID", "42"})
 	assertErr(t, err, errInvalidArgument)
 }
 func TestHandler_SecondArgInvalid(t *testing.T) {
-	handler := NewCLIHandler(nil, nil)
+	handler := NewCLIHandler(nil, &calc.Addition{})
 	err := handler.Handle([]string{"42", "INVALID"})
 	assertErr(t, err, errInvalidArgument)
 }
