@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"errors"
+	"reflect"
 	"testing"
 
 	"github.com/mdw-cohort-b/calc-lib"
@@ -14,6 +15,12 @@ func assertErr(t *testing.T, actual error, targets ...error) {
 			t.Helper()
 			t.Errorf("want: %v, got: %v", target, actual)
 		}
+	}
+}
+func assertEqual(t *testing.T, actual, expected any) {
+	t.Helper()
+	if !reflect.DeepEqual(actual, expected) {
+		t.Errorf("want: [%v], got: [%v]", expected, actual)
 	}
 }
 
