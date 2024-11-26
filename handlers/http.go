@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -9,7 +10,7 @@ import (
 	"github.com/mdw-cohort-b/calc-lib"
 )
 
-func NewHTTPRouter(logger *log.Logger) http.Handler {
+func NewHTTPRouter(logger io.Writer) http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("GET /add", NewHTTPHandler(logger, new(calc.Addition)))
 	mux.Handle("GET /sub", NewHTTPHandler(logger, new(calc.Subtraction)))
@@ -23,8 +24,8 @@ type HTTPHandler struct {
 	calculator Calculator
 }
 
-func NewHTTPHandler(logger *log.Logger, calculator Calculator) *HTTPHandler {
-	return &HTTPHandler{logger: logger, calculator: calculator}
+func NewHTTPHandler(logger io.Writer, calculator Calculator) *HTTPHandler {
+	return &HTTPHandler{logger: log.New(logger, "HTTPHandler: ", 0), calculator: calculator}
 }
 func (this *HTTPHandler) ServeHTTP(response http.ResponseWriter, request *http.Request) {
 	query := request.URL.Query()
@@ -43,6 +44,6 @@ func (this *HTTPHandler) ServeHTTP(response http.ResponseWriter, request *http.R
 	c := this.calculator.Calculate(a, b)
 	_, err = fmt.Fprintf(response, "%d", c)
 	if err != nil {
-		this.logger.Println(err)
+		this.logger.Printf("%v", err)
 	}
 }

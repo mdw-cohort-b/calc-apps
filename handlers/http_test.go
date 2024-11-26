@@ -3,7 +3,6 @@ package handlers
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/http/httputil"
@@ -26,8 +25,7 @@ func assertRoute(t *testing.T, method, target string, statusCode int, responseBo
 		request := httptest.NewRequest(method, target, nil)
 		recorder := httptest.NewRecorder()
 		var logBuffer bytes.Buffer
-		logger := log.New(&logBuffer, "test> ", 0)
-		router := NewHTTPRouter(logger)
+		router := NewHTTPRouter(&logBuffer)
 
 		requestDump, err := httputil.DumpRequest(request, true)
 		assertErr(t, err, nil)
@@ -38,6 +36,8 @@ func assertRoute(t *testing.T, method, target string, statusCode int, responseBo
 		responseDump, err := httputil.DumpResponse(recorder.Result(), true)
 		assertErr(t, err, nil)
 		t.Logf("response dump:\n%s", string(responseDump))
+
+		t.Log(logBuffer.String())
 
 		assertEqual(t, recorder.Code, statusCode)
 		assertEqual(t, recorder.Body.String(), responseBody)

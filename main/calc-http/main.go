@@ -9,8 +9,7 @@ import (
 )
 
 func main() {
-	logger := log.New(os.Stdout, "http: ", 0)
-	router := handlers.NewHTTPRouter(logger)
+	router := handlers.NewHTTPRouter(os.Stderr)
 	address := "localhost:8080"
 	log.Println("Listening on " + address)
 	err := http.ListenAndServe(address, router)
