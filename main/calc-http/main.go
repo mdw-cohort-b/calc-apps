@@ -4,14 +4,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/mdw-cohort-b/calc-apps/handlers"
 )
 
 func main() {
-	//router := http.NewServeMux()
-	//router.HandleFunc("/bar", func(w http.ResponseWriter, r *http.Request) {
-	//	fmt.Fprintf(w, "Hello, %s", r.URL.Query().Get("name"))
-	//})
-
 	logger := log.New(os.Stdout, "http: ", 0)
 	router := handlers.NewHTTPRouter(logger)
 	address := "localhost:8080"
