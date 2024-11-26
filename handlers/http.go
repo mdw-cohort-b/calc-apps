@@ -43,6 +43,6 @@ func (this *HTTPHandler) ServeHTTP(response http.ResponseWriter, request *http.R
 	c := this.calculator.Calculate(a, b)
 	_, err = fmt.Fprintf(response, "%d", c)
 	if err != nil {
-		log.Println(err)
+		this.logger.Println(err)
 	}
 }
